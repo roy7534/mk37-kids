@@ -1,0 +1,201 @@
+<!doctype html>
+<html lang="he" dir="rtl">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
+  <title>MK37 Kids</title>
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="MK37 Kids">
+  <meta name="theme-color" content="#2b2e37">
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="apple-touch-icon" href="icons/icon-180.png">
+  <link rel="icon" href="icons/icon.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<div class="organ" id="organ">
+  <svg class="panel" id="panel" aria-label="Medeli MK37"></svg>
+
+  <main class="window" id="win">
+    <div class="scene" aria-hidden="true">
+      <div class="sun"></div>
+      <svg class="floaty f1" viewBox="0 0 40 50"><path d="M30 2v32a8 6 -20 1 1 -4 -5V10l-14 4v26a8 6 -20 1 1 -4 -5V8z" fill="#f3b6c9"/></svg>
+      <svg class="floaty f2" viewBox="0 0 40 50"><path d="M24 2v32a9 7 -20 1 1 -4 -5V2z" fill="#c7b6f3"/></svg>
+      <svg class="floaty f3" viewBox="0 0 40 50"><path d="M24 2v32a9 7 -20 1 1 -4 -5V2z" fill="#a9e2c4"/></svg>
+      <svg class="hills" viewBox="0 0 1200 200" preserveAspectRatio="none"><path d="M0 120 C200 60 380 150 600 100 S1000 40 1200 110 V200 H0Z" fill="#cdeedd"/><path d="M0 160 C240 110 420 190 700 150 S1050 120 1200 160 V200 H0Z" fill="#a9e2c4"/></svg>
+    </div>
+
+    <!-- Splash -->
+    <section class="scr active" id="s-splash">
+      <div class="splash">
+        <div class="mascot big" id="splash-noti"></div>
+        <div class="splash-text"><h1>MK37 Kids</h1><p>לוחצים על הכפתור הכתום ומתחילים</p></div>
+        <button class="orange-btn" id="btn-start" aria-label="התחלה"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z" fill="#3b2200"/></svg></button>
+      </div>
+    </section>
+
+    <!-- Home -->
+    <section class="scr" id="s-home">
+      <div class="home">
+        <div class="mascot-wrap"><div class="bubble" id="home-bubble"></div><div class="mascot" id="home-noti"></div></div>
+        <div class="cards">
+          <button class="card c-map" data-go="map"><span class="ic" data-icon="map"></span>המסע<small id="home-level"></small></button>
+          <button class="card c-songs" data-go="songs"><span class="ic" data-icon="songs"></span>שירים<small id="home-songs"></small></button>
+          <button class="card c-organ" data-go="free"><span class="ic" data-icon="organ"></span>אורגן חופשי<small>200 צלילים</small></button>
+        </div>
+        <div class="side">
+          <button class="gift-btn hidden" id="daily-gift" aria-label="מתנה יומית"></button>
+          <div class="jar" id="jar"></div>
+          <div class="jar-count" id="jar-count">0</div>
+          <button class="chip" data-go="album"><span class="ic sm" data-icon="album"></span>אלבום</button>
+        </div>
+      </div>
+      <div class="chip status" id="status-home"></div>
+    </section>
+
+    <!-- Journey map -->
+    <section class="scr" id="s-map">
+      <header class="win-head"><button class="chip back" aria-label="בית">בית</button><div class="chip title">המסע המוזיקלי</div><div class="chip"><span class="ic sm star-ic"></span><b class="stars-total"></b></div></header>
+      <div class="map" id="map"></div>
+    </section>
+
+    <!-- Songs -->
+    <section class="scr" id="s-songs">
+      <header class="win-head"><button class="chip back">בית</button><div class="chip title">שירים · בוחרים מספר ולוחצים ▶</div><span></span></header>
+      <div class="song-list" id="song-list"></div>
+    </section>
+
+    <!-- Game -->
+    <section class="scr" id="s-game">
+      <button class="chip exit" id="game-exit">יציאה</button>
+      <div class="chip score" id="game-score"></div>
+      <div class="song-title chip hidden" id="game-title"></div>
+      <div class="stage" id="stage"></div>
+      <div class="guide"><div class="bubble" id="guide-bubble"></div><div class="mascot" id="guide-noti"></div></div>
+      <div class="chip status" id="status-game"></div>
+      <div class="combo" id="combo"></div>
+    </section>
+
+    <!-- Free organ -->
+    <section class="scr" id="s-free">
+      <button class="chip exit back">בית</button>
+      <div class="free">
+        <div class="free-card">
+          <div class="free-mode" id="free-mode">SOUND · צליל</div>
+          <div class="free-name" id="free-name">פסנתר</div>
+          <div class="free-en" id="free-en">PIANO</div>
+          <div class="free-flags" id="free-flags"></div>
+          <div class="free-help">בוחרים צליל, קצב או שיר בכפתורים למעלה, מקלידים מספר ולוחצים על הכפתור הכתום</div>
+        </div>
+        <div class="mascot dance" id="free-noti"></div>
+      </div>
+    </section>
+
+    <!-- Album -->
+    <section class="scr" id="s-album">
+      <header class="win-head"><button class="chip back">בית</button><div class="chip title">אלבום המדבקות</div><div class="chip" id="album-count"></div></header>
+      <div class="album" id="album"></div>
+    </section>
+
+    <!-- Song editor -->
+    <section class="scr" id="s-editor">
+      <header class="win-head"><button class="chip" id="ed-back">חזרה</button><div class="chip title">שיר חדש</div><span></span></header>
+      <div class="editor">
+        <div class="ed-row">
+          <input id="ed-title" class="field" placeholder="שם השיר" maxlength="30">
+          <button id="ed-rec" class="pill rec">● הקלטה</button>
+          <button id="ed-undo" class="pill">מחק תו</button>
+          <button id="ed-clear" class="pill">נקה</button>
+          <button id="ed-play" class="pill">▶ השמע</button>
+          <button id="ed-save" class="pill go">שמור</button>
+        </div>
+        <svg id="ed-beads" class="ed-beads" viewBox="0 0 1000 60" preserveAspectRatio="xMinYMid meet"></svg>
+        <textarea id="ed-text" class="field mono" rows="2" dir="ltr" spellcheck="false" placeholder="C4 D4 E4/2   או   דו רה מי"></textarea>
+        <p class="ed-help">לוחצים "הקלטה" ומנגנים את השיר באורגן. אפשר גם לכתוב תווים: /2 = תו ארוך.</p>
+      </div>
+    </section>
+
+    <!-- In-window overlays -->
+    <div class="win-overlay hidden" id="reward">
+      <div class="reward">
+        <div class="reward-card">
+          <h2 id="reward-title">כל הכבוד!</h2>
+          <div class="stars" id="reward-stars"></div>
+          <div class="reward-sub" id="reward-sub"></div>
+          <div class="actions" id="reward-actions"><button class="pill again" id="reward-again">↻ שוב</button><button class="pill go" id="reward-next">הלאה ▶</button></div>
+        </div>
+        <div class="gift-zone">
+          <button class="gift-btn big" id="reward-gift" aria-label="פתיחת מתנה"></button>
+          <div class="sticker-new hidden" id="reward-sticker"></div>
+        </div>
+      </div>
+    </div>
+    <div class="win-overlay hidden" id="break">
+      <div class="reward"><div class="mascot" id="break-noti"></div><div class="reward-card"><h2>זמן להפסקה!</h2><div class="reward-sub">נוטי הולך לנוח. נתראה בפעם הבאה!</div><div class="reward-sub small">הורים: לחיצה ארוכה על כפתור ההפעלה ⏻ באורגן</div></div></div>
+    </div>
+  </main>
+
+  <div class="keys" id="keys"><div class="keys-inner" id="kb"></div><div class="keys-note" id="keys-note"></div></div>
+</div>
+
+<!-- Parent area (long-press the power button) -->
+<div id="parent" class="parent hidden">
+  <div class="parent-card">
+    <header class="p-head"><h2>אזור הורים</h2><button class="pill" id="p-close">סגירה</button></header>
+    <div class="p-sec">
+      <h3>הילד/ה</h3>
+      <div class="p-grid">
+        <label>שם<input id="p-name" class="field" maxlength="20"></label>
+        <label>פנייה בקול<select id="p-gender" class="field"><option value="f">בת – "את אלופה!"</option><option value="m">בן – "אתה אלוף!"</option></select></label>
+        <label>הגבלת זמן משחק (דקות, 0 = בלי)<input id="p-time" type="number" min="0" max="120" class="field"></label>
+      </div>
+    </div>
+    <div class="p-sec">
+      <h3>שמיעת האורגן</h3>
+      <div class="p-grid">
+        <label>איך האפליקציה שומעת את האורגן
+          <select id="p-input" class="field">
+            <option value="auto">אוטומטי – כבל אם יש, אחרת מיקרופון</option>
+            <option value="midi">רק כבל USB (MIDI)</option>
+            <option value="mic">רק מיקרופון</option>
+          </select></label>
+        <label>רגישות מיקרופון<input id="p-sens" type="range" min="0" max="1" step="0.05"></label>
+        <label>הקליד הכי שמאלי באורגן<span class="p-inline"><b id="p-lowkey"></b><button class="pill small" id="p-calib">כיול</button></span></label>
+        <label class="chk"><input id="p-strict" type="checkbox"> לדרוש אוקטבה מדויקת (רק עם כבל)</label>
+        <label class="chk"><input id="p-touch" type="checkbox"> מצב בדיקה: לאשר גם לחיצה על המסך</label>
+      </div>
+      <div class="p-test"><b>בדיקה חיה:</b> <span id="p-status"></span><div class="meter"><i id="p-meter"></i></div><div>תו אחרון שנשמע: <b id="p-last">—</b></div></div>
+    </div>
+    <div class="p-sec">
+      <h3>קול</h3>
+      <div class="p-grid">
+        <label class="chk"><input id="p-voice" type="checkbox"> נוטי מדבר</label>
+        <label>עוצמת צלילי האפליקציה<input id="p-vol" type="range" min="0" max="1" step="0.05"></label>
+      </div>
+      <p class="p-note">אפשר להקליט את המשפטים בקול שלכם, ונוטי ידבר בקול שלכם. לוחצים ● ואומרים את המשפט, ולוחצים שוב כדי לעצור.</p>
+      <div class="rec-list" id="rec-list"></div>
+    </div>
+    <div class="p-sec p-actions">
+      <a class="pill" href="stickers.html" target="_blank">דף מדבקות להדפסה</a>
+      <button class="pill" id="p-songs">הוספת שיר חדש</button>
+      <button class="pill" id="p-unlock">פתיחת כל השלבים</button>
+      <button class="pill danger" id="p-reset">איפוס התקדמות</button>
+    </div>
+  </div>
+</div>
+
+<canvas id="confetti"></canvas>
+
+<script src="js/songs.js"></script>
+<script src="js/phrases.js"></script>
+<script src="js/audio.js"></script>
+<script src="js/voice.js"></script>
+<script src="js/input.js"></script>
+<script src="js/art.js"></script>
+<script src="js/app.js"></script>
+</body>
+</html>
