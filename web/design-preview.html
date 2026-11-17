@@ -1,0 +1,400 @@
+<!doctype html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>MK37 Kids – Design Preview</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  /* Design tokens — body colour sampled from the MK37 "Space Black" finish */
+  :root {
+    --body-1: #474c5a; --body-2: #383c48; --body-3: #2b2e37;
+    --print: #b9bdc8; --print-dim: #8c919e; --led: #ff2d2d; --led-off: #3a1010;
+    --orange: #f7a234; --orange-d: #c87414;
+    --ink: #2a2550; --ink-2: #6b6690;
+    --cream: #fff6ec; --blush: #ffe0ea; --mint: #c9f0dc;
+    --c-do: #ff4d5e; --c-re: #ff9a2e; --c-mi: #ffd23f; --c-fa: #3ddc84; --c-sol: #38c6f4; --c-la: #5b6cff; --c-si: #b65cff;
+    --kb-h: 270px;
+  }
+  * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+  html, body { margin: 0; height: 100%; overflow: hidden; }
+  body {
+    font-family: 'Fredoka', 'Varela Round', system-ui, sans-serif; color: var(--ink);
+    background: #1a1c22;
+  }
+  /* The whole iPad screen is the organ body */
+  .organ {
+    position: fixed; inset: 0; display: flex; flex-direction: column;
+    background:
+      radial-gradient(120% 60% at 20% 0%, rgba(255,255,255,.07), transparent 60%),
+      linear-gradient(170deg, var(--body-1), var(--body-2) 45%, var(--body-3));
+    padding: 10px 14px 0;
+  }
+  /* subtle matte texture */
+  .organ::before { content: ''; position: absolute; inset: 0; pointer-events: none; opacity: .18; mix-blend-mode: overlay;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence baseFrequency='.9' numOctaves='2'/%3E%3C/filter%3E%3Crect width='120' height='120' filter='url(%23n)' opacity='.6'/%3E%3C/svg%3E"); }
+  .panel { width: 100%; display: block; flex: 0 0 auto; }
+  .panel text { font-family: 'Helvetica Neue', Arial, sans-serif; }
+  .panel .btn { cursor: pointer; }
+  .panel .btn:active { transform: translateY(2px); }
+
+  /* ---------- The "magic window" ---------- */
+  .window {
+    flex: 1; min-height: 0; margin: 6px 6px 12px; border-radius: 26px; position: relative; overflow: hidden;
+    box-shadow: 0 0 0 3px #1c1e25, 0 0 0 6px #50566544, inset 0 4px 14px rgba(0,0,0,.35);
+    background: linear-gradient(180deg, #fff1e3 0%, #ffe4ee 70%, #ffdbe9 100%);
+  }
+  .scene { position: absolute; inset: 0; pointer-events: none; }
+  .scene svg { position: absolute; bottom: 0; left: 0; width: 100%; height: 46%; }
+  .sun { position: absolute; top: -40px; left: 8%; width: 150px; height: 150px; border-radius: 50%; background: radial-gradient(circle, #fff7c2 0 40%, #ffe48a 41% 60%, transparent 61%); opacity: .9; }
+  .floaty { position: absolute; opacity: .5; animation: drift 9s ease-in-out infinite; }
+  @keyframes drift { 50% { transform: translateY(-14px) rotate(8deg); } }
+  .content { position: relative; height: 100%; display: flex; align-items: center; gap: 28px; padding: 18px 28px; }
+
+  /* Noti mascot */
+  .noti { width: 150px; flex: 0 0 auto; animation: bob 2.6s ease-in-out infinite; filter: drop-shadow(0 10px 8px rgba(42,37,80,.18)); }
+  @keyframes bob { 50% { transform: translateY(-10px) rotate(-3deg); } }
+  .bubble { position: absolute; background: #fff; border-radius: 22px; padding: 12px 20px; font-size: 24px; font-weight: 600; box-shadow: 0 6px 0 #f3d9e2, 0 10px 20px rgba(42,37,80,.12); white-space: nowrap; }
+  .bubble::after { content: ''; position: absolute; bottom: -12px; right: 34px; border: 12px solid transparent; border-top-color: #fff; border-bottom: 0; }
+
+  /* Home cards */
+  .cards { display: flex; gap: 18px; flex: 1; justify-content: center; }
+  .card {
+    width: 200px; height: 214px; border-radius: 28px; background: var(--cream); display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 8px;
+    font-size: 26px; font-weight: 600; color: var(--ink); border: 0; font-family: inherit; cursor: pointer;
+    box-shadow: 0 8px 0 var(--edge, #ecd9c6), 0 16px 26px rgba(42,37,80,.14), inset 0 2px 0 #fff;
+    transition: transform .25s cubic-bezier(.34,1.56,.64,1);
+  }
+  .card:active { transform: translateY(6px); box-shadow: 0 2px 0 var(--edge, #ecd9c6); }
+  .card svg { width: 120px; height: 110px; }
+  .card small { font-size: 15px; font-weight: 500; color: var(--ink-2); margin-top: -6px; }
+  .side { display: flex; flex-direction: column; gap: 14px; align-items: center; }
+  .jar-count { font-size: 30px; font-weight: 700; margin-top: -10px; }
+  .chip { display: inline-flex; align-items: center; gap: 8px; background: #fff; border-radius: 999px; padding: 8px 16px; font-size: 17px; font-weight: 500; box-shadow: 0 4px 0 #f0d6df; }
+  .chip .dot { width: 10px; height: 10px; border-radius: 50%; background: #2ecc71; box-shadow: 0 0 8px #2ecc71; }
+
+  /* Song game */
+  .song-title { position: absolute; top: 14px; left: 50%; transform: translateX(-50%); display: flex; align-items: center; gap: 10px; background: #fff; padding: 8px 20px 8px 10px; border-radius: 999px; font-size: 22px; font-weight: 600; box-shadow: 0 4px 0 #f0d6df; }
+  .song-title .num { font-family: 'Helvetica Neue', Arial; background: #111; color: var(--led); font-weight: 700; padding: 2px 10px; border-radius: 8px; letter-spacing: 2px; text-shadow: 0 0 6px rgba(255,45,45,.7); }
+  .score { position: absolute; top: 14px; left: 22px; }
+  .necklace { position: absolute; left: 0; right: 190px; top: 70px; height: 150px; direction: ltr; }
+  .status { position: absolute; bottom: 14px; left: 22px; }
+
+  /* Reward */
+  .dim { position: absolute; inset: 0; background: rgba(42,37,80,.35); backdrop-filter: blur(3px); -webkit-backdrop-filter: blur(3px); }
+  .reward { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; gap: 40px; }
+  .reward-card { background: var(--cream); border-radius: 34px; padding: 18px 36px 22px; display: flex; flex-direction: column; align-items: center; gap: 6px; box-shadow: 0 10px 0 #ecd9c6, 0 24px 40px rgba(0,0,0,.25); }
+  .reward-card h2 { margin: 0; font-size: 36px; color: #e24a7b; }
+  .stars { display: flex; gap: 6px; align-items: flex-end; }
+  .stars svg { width: 78px; height: 78px; animation: pop .6s cubic-bezier(.34,1.56,.64,1) both; }
+  .stars svg:nth-child(2) { width: 96px; height: 96px; animation-delay: .25s; }
+  .stars svg:nth-child(3) { animation-delay: .5s; }
+  @keyframes pop { from { transform: scale(0) rotate(-40deg); } }
+  .actions { display: flex; gap: 14px; margin-top: 8px; }
+  .pill { border: 0; font-family: inherit; font-size: 24px; font-weight: 600; border-radius: 999px; padding: 12px 28px; cursor: pointer; display: inline-flex; align-items: center; gap: 10px; }
+  .pill.go { background: radial-gradient(circle at 35% 30%, #ffc56a, var(--orange)); color: #3b2200; box-shadow: 0 6px 0 var(--orange-d); }
+  .pill.again { background: #fff; color: var(--ink); box-shadow: 0 6px 0 #e6d4c4; }
+  .sticker-new { display: flex; flex-direction: column; align-items: center; gap: 4px; font-size: 22px; font-weight: 600; color: #fff; text-shadow: 0 2px 4px rgba(0,0,0,.3); }
+  .sticker-new svg { width: 190px; height: 190px; animation: reveal .9s cubic-bezier(.34,1.56,.64,1) both .8s; filter: drop-shadow(0 12px 14px rgba(0,0,0,.3)); }
+  @keyframes reveal { from { transform: scale(0) rotate(-200deg); } }
+
+  /* ---------- Keyboard (mini keys, like the real one) ---------- */
+  .keys { flex: 0 0 var(--kb-h); position: relative; margin: 0 -14px; padding: 0 10px 10px; background: linear-gradient(#1b1d23, #121318); direction: ltr; }
+  .keys-inner { position: relative; height: 100%; display: flex; gap: 3px; padding-top: 6px; border-top: 3px solid #0c0d10; }
+  .wk { flex: 1; position: relative; border-radius: 0 0 9px 9px; background: linear-gradient(180deg, #e9e9e6 0%, #fbfbf9 12%, #f4f4f1 88%, #dcdcd8 100%); box-shadow: inset 0 -7px 0 #d0d0cb, 0 2px 2px rgba(0,0,0,.6); }
+  .bk { position: absolute; top: 6px; height: 58%; z-index: 2; border-radius: 0 0 6px 6px; background: linear-gradient(90deg, #0b0b0c, #26272b 45%, #121214); box-shadow: inset 0 -8px 0 #000, 0 4px 5px rgba(0,0,0,.6); }
+  .stk { position: absolute; left: 50%; bottom: 16px; width: 58%; aspect-ratio: 1; transform: translateX(-50%); border-radius: 50%; box-shadow: 0 0 0 2px rgba(255,255,255,.9), inset -3px -4px 0 rgba(0,0,0,.14), inset 3px 3px 0 rgba(255,255,255,.35); }
+  .wk.target { background: linear-gradient(180deg, #fff, color-mix(in srgb, var(--tc) 35%, #fff)); box-shadow: inset 0 -7px 0 color-mix(in srgb, var(--tc) 60%, #000), 0 0 0 3px var(--tc), 0 0 28px 8px color-mix(in srgb, var(--tc) 70%, transparent); z-index: 1; }
+  .pin { position: absolute; top: -66px; left: 50%; width: 46px; transform: translateX(-50%); animation: pin .8s ease-in-out infinite; z-index: 5; filter: drop-shadow(0 4px 4px rgba(0,0,0,.35)); }
+  @keyframes pin { 50% { transform: translate(-50%, 12px); } }
+  .keys .hint { position: absolute; top: 8px; right: 18px; color: #6f7480; font-size: 13px; direction: rtl; }
+
+  /* Preview switcher (not part of the app) */
+  .switch { position: fixed; bottom: 6px; left: 50%; transform: translateX(-50%); z-index: 99; display: flex; gap: 4px; background: rgba(0,0,0,.55); padding: 4px; border-radius: 999px; }
+  .switch a { color: #fff; text-decoration: none; font-size: 12px; padding: 4px 10px; border-radius: 999px; }
+  .switch a.on { background: var(--orange); color: #000; }
+  .view { display: none; } .view.on { display: contents; }
+</style>
+</head>
+<body>
+<nav class="switch"><a href="#home">בית</a><a href="#game">שיר</a><a href="#reward">פרס</a></nav>
+
+<div class="organ">
+  <!-- ======= MK37 control panel, redrawn as vector from the product photo ======= -->
+  <svg class="panel" viewBox="0 0 1556 300" aria-label="Medeli MK37 panel">
+    <defs>
+      <radialGradient id="knob" cx="35%" cy="30%"><stop offset="0" stop-color="#4a4a4d"/><stop offset="1" stop-color="#0c0c0d"/></radialGradient>
+      <radialGradient id="digit" cx="35%" cy="30%"><stop offset="0" stop-color="#ffffff"/><stop offset="1" stop-color="#cfd0d3"/></radialGradient>
+      <radialGradient id="orangeBtn" cx="35%" cy="30%"><stop offset="0" stop-color="#ffc56a"/><stop offset="1" stop-color="#f39a1e"/></radialGradient>
+      <linearGradient id="fbtn" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#34363d"/><stop offset="1" stop-color="#16171b"/></linearGradient>
+      <filter id="glow" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="3" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+    </defs>
+
+    <!-- Volume knob + power -->
+    <text x="150" y="30" text-anchor="middle" font-size="12" fill="var(--print)" letter-spacing="1">VOLUME</text>
+    <g class="btn"><circle cx="150" cy="82" r="36" fill="#0a0a0b"/><circle cx="150" cy="80" r="33" fill="url(#knob)"/><line x1="150" y1="80" x2="173" y2="62" stroke="#e0a85c" stroke-width="4" stroke-linecap="round"/></g>
+    <g transform="translate(150 196)" fill="none" stroke="var(--print)" stroke-width="2" stroke-linecap="round"><path d="M-6 -4 A8 8 0 1 0 6 -4"/><line x1="0" y1="-9" x2="0" y2="-1"/></g>
+    <g class="btn"><circle cx="150" cy="238" r="20" fill="#0a0a0b"/><circle cx="150" cy="236" r="17" fill="#1d1e22"/></g>
+
+    <!-- Black display window -->
+    <rect x="237" y="22" width="500" height="150" rx="6" fill="#0c0d10"/>
+    <g id="led" transform="translate(266 56) scale(.68)" filter="url(#glow)"></g>
+    <g font-size="10" fill="#80848f" letter-spacing=".5"><text x="268" y="140" id="m-song">SONG</text><text x="314" y="140" id="m-style">STYLE</text><text x="363" y="140" id="m-sound">SOUND</text></g>
+
+    <!-- Function buttons, row 1 (labels above, exactly as printed) -->
+    <g font-size="10" fill="var(--print)" text-anchor="middle" letter-spacing=".5" id="fn1"></g>
+    <text x="437" y="128" font-size="9.5" fill="var(--print)" text-anchor="middle">AUTO</text>
+    <path d="M454 126 l6 -8 l3 2 l-6 8 z" fill="var(--print)"/>
+    <!-- row 2 -->
+    <g id="fn2"></g>
+    <g font-size="10" fill="var(--print)" text-anchor="middle"><text x="549" y="166" letter-spacing=".5">METRONOME</text><text x="593" y="166">‹</text><text x="645" y="166">›</text><text x="697" y="166">▶/■</text></g>
+
+    <!-- Number buttons 0–9 -->
+    <g id="digits" font-size="12" fill="var(--print)" text-anchor="middle"></g>
+
+    <!-- Printed reference charts -->
+    <g id="charts" font-size="7.8" fill="var(--print)"></g>
+
+    <!-- Speaker grille -->
+    <g id="grille"></g>
+
+    <!-- Model badge -->
+    <text x="1318" y="285" font-size="21" fill="#a9aeba" letter-spacing="5" font-weight="500">MEDELI</text>
+    <text x="1450" y="285" font-size="22" fill="#c7cbd5" font-style="italic" font-weight="800" letter-spacing="1">MK37</text>
+  </svg>
+
+  <!-- ======= Magic window (the game lives here) ======= -->
+  <main class="window">
+    <div class="scene">
+      <div class="sun"></div>
+      <svg class="floaty" style="top:30px;right:30%;width:34px" viewBox="0 0 40 50"><path d="M30 2v32a8 6 -20 1 1 -4 -5V10l-14 4v26a8 6 -20 1 1 -4 -5V8z" fill="#f3b6c9"/></svg>
+      <svg class="floaty" style="top:90px;left:42%;width:26px;animation-delay:-3s" viewBox="0 0 40 50"><path d="M24 2v32a9 7 -20 1 1 -4 -5V2z" fill="#c7b6f3"/></svg>
+      <svg viewBox="0 0 1200 200" preserveAspectRatio="none">
+        <path d="M0 120 C200 60 380 150 600 100 S1000 40 1200 110 V200 H0Z" fill="#cdeedd"/>
+        <path d="M0 160 C240 110 420 190 700 150 S1050 120 1200 160 V200 H0Z" fill="#a9e2c4"/>
+      </svg>
+    </div>
+
+    <!-- HOME -->
+    <section class="view" id="v-home">
+      <div class="content">
+        <div style="position:relative;display:flex;flex-direction:column;align-items:center">
+          <div class="bubble" style="top:-56px;right:-20px">היי! מנגנים ביחד?</div>
+          <svg class="noti" viewBox="0 0 160 200" data-noti="#ff4d5e"></svg>
+        </div>
+        <div class="cards">
+          <button class="card" style="--edge:#f2cf8a;background:#fff3d2">
+            <svg viewBox="0 0 120 110"><path d="M14 92 C30 60 70 96 66 60 S100 40 104 18" fill="none" stroke="#e8b04a" stroke-width="7" stroke-dasharray="2 12" stroke-linecap="round"/><circle cx="14" cy="92" r="11" fill="var(--c-do)"/><circle cx="62" cy="66" r="11" fill="var(--c-mi)"/><circle cx="90" cy="34" r="11" fill="var(--c-sol)"/><path d="M104 6 v34" stroke="#6b5a3a" stroke-width="4" stroke-linecap="round"/><path d="M106 6 h-0 l20 8 l-20 8z" fill="var(--c-la)"/></svg>
+            המסע<small>שלב 4 מתוך 20</small>
+          </button>
+          <button class="card" style="--edge:#f2b8cc;background:#ffe7ef">
+            <svg viewBox="0 0 120 110"><g stroke="#e3a9bd" stroke-width="2.5"><line x1="6" y1="34" x2="114" y2="34"/><line x1="6" y1="48" x2="114" y2="48"/><line x1="6" y1="62" x2="114" y2="62"/><line x1="6" y1="76" x2="114" y2="76"/></g><g><ellipse cx="30" cy="76" rx="11" ry="8" transform="rotate(-20 30 76)" fill="var(--c-do)"/><rect x="38" y="30" width="4" height="46" rx="2" fill="#2a2550"/><ellipse cx="62" cy="62" rx="11" ry="8" transform="rotate(-20 62 62)" fill="var(--c-mi)"/><rect x="70" y="16" width="4" height="46" rx="2" fill="#2a2550"/><ellipse cx="94" cy="48" rx="11" ry="8" transform="rotate(-20 94 48)" fill="var(--c-sol)"/><rect x="102" y="4" width="4" height="44" rx="2" fill="#2a2550"/><path d="M42 30 L74 16 L74 24 L42 38Z" fill="#2a2550"/></g></svg>
+            שירים<small>12 שירים</small>
+          </button>
+          <button class="card" style="--edge:#b9c7e6;background:#e6edfb">
+            <svg viewBox="0 0 120 110"><rect x="4" y="22" width="112" height="72" rx="12" fill="#3b3f4c"/><rect x="14" y="30" width="34" height="16" rx="3" fill="#0c0d10"/><text x="18" y="43" font-size="12" font-family="Arial" font-weight="700" fill="#ff2d2d">001</text><circle cx="96" cy="38" r="6" fill="#f7a234"/><g fill="#f6f6f3"><rect x="12" y="54" width="12" height="34" rx="2"/><rect x="26" y="54" width="12" height="34" rx="2"/><rect x="40" y="54" width="12" height="34" rx="2"/><rect x="54" y="54" width="12" height="34" rx="2"/><rect x="68" y="54" width="12" height="34" rx="2"/><rect x="82" y="54" width="12" height="34" rx="2"/><rect x="96" y="54" width="12" height="34" rx="2"/></g><g fill="#111"><rect x="20" y="54" width="8" height="20" rx="1"/><rect x="34" y="54" width="8" height="20" rx="1"/><rect x="62" y="54" width="8" height="20" rx="1"/><rect x="76" y="54" width="8" height="20" rx="1"/><rect x="90" y="54" width="8" height="20" rx="1"/></g></svg>
+            אורגן חופשי<small>200 צלילים</small>
+          </button>
+        </div>
+        <div class="side">
+          <svg viewBox="0 0 100 120" width="96"><rect x="26" y="4" width="48" height="14" rx="5" fill="#d9a46a"/><path d="M22 20 h56 q12 0 12 14 v70 q0 12 -12 12 h-56 q-12 0 -12 -12 v-70 q0 -14 12 -14z" fill="rgba(255,255,255,.55)" stroke="#fff" stroke-width="3"/><g id="jarstars"></g><path d="M22 30 q-4 30 0 70" stroke="#fff" stroke-width="5" stroke-linecap="round" fill="none" opacity=".8"/></svg>
+          <div class="jar-count">23</div>
+          <button class="chip" style="border:0;font-family:inherit"><svg width="26" viewBox="0 0 30 30"><rect x="3" y="3" width="24" height="24" rx="5" fill="#8e7cf0"/><rect x="15" y="3" width="3" height="24" fill="#6a58d0"/><circle cx="10" cy="12" r="4" fill="#ffd23f"/><circle cx="10" cy="21" r="3" fill="#ff7ea8"/></svg>אלבום</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- SONG GAME -->
+    <section class="view" id="v-game">
+      <div class="song-title"><span class="num">003</span> נצנץ נצנץ כוכב קטן</div>
+      <div class="chip score"><svg width="22" viewBox="0 0 24 24" class="starsvg"></svg> 4 / 42</div>
+      <svg class="necklace" viewBox="0 0 900 150" id="necklace"></svg>
+      <div style="position:absolute;right:26px;bottom:6px;display:flex;flex-direction:column;align-items:center">
+        <div class="bubble" style="position:relative;margin-bottom:14px;font-size:22px">עכשיו הכחול!</div>
+        <svg class="noti" viewBox="0 0 160 200" data-noti="#5b6cff" style="width:130px"></svg>
+      </div>
+      <div class="chip status"><span class="dot"></span>
+        <svg width="34" viewBox="0 0 40 24"><rect x="1" y="2" width="38" height="20" rx="4" fill="#3b3f4c"/><g fill="#fff"><rect x="4" y="10" width="4" height="10"/><rect x="9" y="10" width="4" height="10"/><rect x="14" y="10" width="4" height="10"/><rect x="19" y="10" width="4" height="10"/><rect x="24" y="10" width="4" height="10"/><rect x="29" y="10" width="4" height="10"/></g><rect x="4" y="4" width="10" height="4" rx="1" fill="#ff2d2d"/></svg>
+        האורגן מחובר · מנגנים על האורגן
+      </div>
+    </section>
+
+    <!-- REWARD -->
+    <section class="view" id="v-reward">
+      <div class="dim"></div>
+      <div class="reward">
+        <div class="reward-card">
+          <h2>כל הכבוד!</h2>
+          <div class="stars"><svg viewBox="0 0 24 24" class="starsvg"></svg><svg viewBox="0 0 24 24" class="starsvg"></svg><svg viewBox="0 0 24 24" class="starsvg"></svg></div>
+          <div style="font-size:20px;color:var(--ink-2)">ניגנת את כל השיר בלי טעויות</div>
+          <div class="actions"><button class="pill again">↻ שוב</button><button class="pill go">הלאה ▶</button></div>
+        </div>
+        <div class="sticker-new">
+          <svg viewBox="0 0 200 200" id="sticker-whale"></svg>
+          מדבקה חדשה: לווייתן שר!
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- ======= 37 mini keys with colour stickers ======= -->
+  <div class="keys"><div class="keys-inner" id="kb"></div></div>
+</div>
+
+<script>
+  const NS = 'http://www.w3.org/2000/svg';
+  const COLORS = { 0: '#ff4d5e', 2: '#ff9a2e', 4: '#ffd23f', 5: '#3ddc84', 7: '#38c6f4', 9: '#5b6cff', 11: '#b65cff' };
+  const HE = { 0: 'דו', 2: 'רה', 4: 'מי', 5: 'פה', 7: 'סול', 9: 'לה', 11: 'סי' };
+  const isBlack = (m) => [1, 3, 6, 8, 10].includes(m % 12);
+
+  // ---------- 7-segment LED (drawn, not a font) ----------
+  const SEG = { a: ['h', 4, 4, 44], b: ['v', 44, 4, 42], c: ['v', 44, 42, 80], d: ['h', 80, 4, 44], e: ['v', 4, 42, 80], f: ['v', 4, 4, 42], g: ['h', 42, 4, 44] };
+  const DIG = { 0: 'abcdef', 1: 'bc', 2: 'abged', 3: 'abgcd', 4: 'fgbc', 5: 'afgcd', 6: 'afgedc', 7: 'abc', 8: 'abcdefg', 9: 'abcdfg', '-': 'g' };
+  function segPoly([t, p, s, e]) {
+    return t === 'h' ? `${s + 4},${p} ${s + 8},${p - 4} ${e - 8},${p - 4} ${e - 4},${p} ${e - 8},${p + 4} ${s + 8},${p + 4}`
+                     : `${p},${s + 4} ${p + 4},${s + 8} ${p + 4},${e - 8} ${p},${e - 4} ${p - 4},${e - 8} ${p - 4},${s + 8}`;
+  }
+  function renderLED(str, dot = true) {
+    const g = document.getElementById('led'); g.innerHTML = '';
+    [...str].forEach((ch, i) => {
+      const on = DIG[ch] || '';
+      let h = `<g transform="translate(${i * 60} 0) skewX(-6)">`;
+      for (const k in SEG) h += `<polygon points="${segPoly(SEG[k])}" fill="${on.includes(k) ? 'var(--led)' : 'var(--led-off)'}"/>`;
+      if (i === str.length - 1) h += `<circle cx="54" cy="80" r="4.5" fill="${dot ? 'var(--led)' : 'var(--led-off)'}"/>`;
+      g.insertAdjacentHTML('beforeend', h + '</g>');
+    });
+  }
+
+  // ---------- Panel buttons ----------
+  const F1 = [['CHORD', 437], ['A/B', 487], ['SUSTAIN', 541], ['SONG', 593], ['STYLE', 645], ['SOUND', 697]];
+  document.getElementById('fn1').innerHTML = F1.map(([l, x]) =>
+    `<text x="${x}" y="38">${l}</text><g class="btn" data-fn="${l}"><rect x="${x - 17}" y="48" width="34" height="50" rx="13" fill="#000"/><rect x="${x - 17}" y="46" width="34" height="48" rx="13" fill="url(#fbtn)"/></g>`).join('');
+  document.getElementById('fn2').innerHTML = [541, 593, 645].map((x) =>
+    `<g class="btn"><circle cx="${x}" cy="134" r="17" fill="#000"/><circle cx="${x}" cy="132" r="16" fill="url(#fbtn)"/></g>`).join('') +
+    `<g class="btn"><circle cx="697" cy="134" r="18" fill="#b8650c"/><circle cx="697" cy="132" r="17" fill="url(#orangeBtn)"/></g>`;
+  document.getElementById('digits').innerHTML = Array.from({ length: 10 }, (_, d) => {
+    const x = 252 + d * 52.3;
+    return `<text x="${x}" y="206">${d}</text><g class="btn"><circle cx="${x}" cy="236" r="17" fill="#8d8f94"/><circle cx="${x}" cy="234" r="16" fill="url(#digit)"/></g>`;
+  }).join('');
+
+  // ---------- Printed charts (same ranges as the real panel) ----------
+  const chart = (x, w, title, rows, colW) => {
+    let h = `<rect x="${x}" y="22" width="${w}" height="13" fill="#9ea3b0"/><text x="${x + w / 2}" y="32" text-anchor="middle" fill="#2c2f38" font-size="9.5" font-weight="700">${title}</text>`;
+    rows.forEach((r, i) => {
+      const col = colW ? Math.floor(i / 7) : 0, row = colW ? i % 7 : i;
+      const rx = x + 2 + col * (colW || 0), ry = 50 + row * 14;
+      h += `<g data-r="${title}:${r[0]}"><rect class="hl" x="${rx - 2}" y="${ry - 9}" width="${colW ? colW - 6 : w}" height="12" rx="2" fill="transparent"/><text x="${rx}" y="${ry}">${r[0]}</text><text x="${rx + 38}" y="${ry}">${r[1]}</text></g>`;
+    });
+    return h;
+  };
+  document.getElementById('charts').innerHTML =
+    chart(765, 92, 'SONG', [['001-008', 'CLASSIC'], ['009-026', 'STANDARD'], ['027-052', 'FOLK'], ['053-100', 'PIANO']]) +
+    chart(893, 92, 'STYLE', [['001-018', 'BEAT & POP'], ['019-037', 'ROCK'], ['038-053', 'DANCE'], ['054-064', 'SOUL & FUNK'], ['065-080', 'JAZZ'], ['081-086', 'COUNTRY'], ['087-102', 'LATIN'], ['103-111', 'TRADITIONAL'], ['112-120', 'PIANIST']]) +
+    chart(1020, 196, 'SOUND', [['001-015', 'PIANO'], ['016-030', 'E.PIANO'], ['031-047', 'CHROMATIC'], ['048-060', 'ORGAN'], ['061-065', 'ACCORDION'], ['066-082', 'GUITAR'], ['083-096', 'BASS'],
+      ['097-121', 'STRINGS'], ['122-137', 'BRASS'], ['138-154', 'WOODWIND'], ['155-180', 'SYNTH'], ['181-188', 'ETHNIC'], ['189-197', 'SFX'], ['198-200', 'DRUMS']], 100);
+  document.getElementById('grille').innerHTML = Array.from({ length: 11 }, (_, i) =>
+    `<rect x="1245" y="${30 + i * 19}" width="244" height="9" rx="4.5" fill="#15161a"/><rect x="1245" y="${39 + i * 19}" width="244" height="1.5" fill="rgba(255,255,255,.06)"/>`).join('');
+  function highlightChart(key) {
+    document.querySelectorAll('#charts [data-r]').forEach((g) => {
+      const on = g.dataset.r === key;
+      g.querySelector('.hl').setAttribute('fill', on ? 'var(--led)' : 'transparent');
+      g.querySelectorAll('text').forEach((t) => t.setAttribute('fill', on ? '#fff' : 'var(--print)'));
+    });
+  }
+  function modeLight(m) { ['song', 'style', 'sound'].forEach((k) => document.getElementById('m-' + k).setAttribute('fill', k === m ? 'var(--led)' : '#80848f')); }
+
+  // ---------- Noti: an eighth-note character ----------
+  function shade(hex, f) { const n = parseInt(hex.slice(1), 16); const c = (s) => Math.max(0, Math.min(255, Math.round(((n >> s) & 255) * f))); return `rgb(${c(16)},${c(8)},${c(0)})`; }
+  function noti(color) {
+    const d = shade(color, .72);
+    return `
+      <path d="M118 16 C152 26 162 58 142 92 C150 64 138 48 118 46 Z" fill="${d}"/>
+      <rect x="110" y="14" width="13" height="118" rx="6.5" fill="${d}"/>
+      <ellipse cx="88" cy="190" rx="14" ry="7" fill="${d}"/><ellipse cx="46" cy="192" rx="14" ry="7" fill="${d}"/>
+      <ellipse cx="70" cy="142" rx="62" ry="47" transform="rotate(-18 70 142)" fill="${color}"/>
+      <ellipse cx="46" cy="114" rx="20" ry="9" transform="rotate(-24 46 114)" fill="#fff" opacity=".35"/>
+      <ellipse cx="50" cy="140" rx="13" ry="15" fill="#fff"/><ellipse cx="88" cy="128" rx="13" ry="15" fill="#fff"/>
+      <circle cx="53" cy="143" r="7.5" fill="#2a2550"/><circle cx="91" cy="131" r="7.5" fill="#2a2550"/>
+      <circle cx="56" cy="139" r="2.6" fill="#fff"/><circle cx="94" cy="127" r="2.6" fill="#fff"/>
+      <ellipse cx="34" cy="160" rx="9" ry="5" fill="#ff8fab" opacity=".6"/><ellipse cx="106" cy="146" rx="9" ry="5" fill="#ff8fab" opacity=".6"/>
+      <path d="M60 160 Q74 172 88 154" stroke="#2a2550" stroke-width="4.5" stroke-linecap="round" fill="none"/>`;
+  }
+  document.querySelectorAll('[data-noti]').forEach((s) => (s.innerHTML = noti(s.dataset.noti)));
+
+  // ---------- Star (custom, with rounded points + shine) ----------
+  const STAR = 'M12 1.8l2.9 6.1 6.6.8-4.9 4.6 1.3 6.6L12 16.6 6.1 19.9l1.3-6.6L2.5 8.7l6.6-.8z';
+  document.querySelectorAll('.starsvg').forEach((s) => (s.innerHTML =
+    `<path d="${STAR}" fill="#ffc93c" stroke="#f0a020" stroke-width="1.4" stroke-linejoin="round"/><path d="M8.6 8.8l2.3-.3 1-2.2" stroke="#fff" stroke-width="1.3" stroke-linecap="round" fill="none" opacity=".8"/>`));
+  document.getElementById('jarstars').innerHTML = [[34, 96], [56, 98], [74, 92], [44, 80], [64, 78], [30, 64], [52, 62], [72, 60], [40, 46]].map(([x, y], i) =>
+    `<path d="${STAR}" transform="translate(${x - 9} ${y - 9}) scale(.78) rotate(${i * 23} 12 12)" fill="#ffc93c" stroke="#f0a020" stroke-width="1.2"/>`).join('');
+
+  // ---------- Song "necklace": glossy beads on a string ----------
+  (function () {
+    const seq = [0, 0, 7, 7, 9, 9, 7, 5, 5, 4, 4, 2, 2, 0];
+    const done = 4, cur = 4;
+    let h = '<defs><radialGradient id="gloss" cx="35%" cy="30%"><stop offset="0" stop-color="#fff" stop-opacity=".8"/><stop offset=".45" stop-color="#fff" stop-opacity="0"/></radialGradient></defs>';
+    const pts = seq.map((_, i) => [40 + i * 64, 75 + Math.sin(i * .7) * 22]);
+    h += `<path d="${pts.map((p, i) => (i ? 'L' : 'M') + p.join(' ')).join(' ')}" stroke="#d9b7c6" stroke-width="4" fill="none" stroke-dasharray="1 9" stroke-linecap="round"/>`;
+    seq.forEach((n, i) => {
+      const [x, y] = pts[i], r = i === cur ? 36 : 25, c = COLORS[n];
+      const op = i < done ? .45 : 1;
+      if (i === cur) h += `<circle cx="${x}" cy="${y}" r="${r + 10}" fill="none" stroke="${c}" stroke-width="4" opacity=".5"><animate attributeName="r" values="${r + 6};${r + 16};${r + 6}" dur="1.2s" repeatCount="indefinite"/><animate attributeName="opacity" values=".6;0;.6" dur="1.2s" repeatCount="indefinite"/></circle>`;
+      h += `<g opacity="${op}"><circle cx="${x}" cy="${y + 4}" r="${r}" fill="${shade(c, .7)}"/><circle cx="${x}" cy="${y}" r="${r}" fill="${c}"/><circle cx="${x}" cy="${y}" r="${r}" fill="url(#gloss)"/>`;
+      h += `<text x="${x}" y="${y + (i === cur ? 7 : 5)}" text-anchor="middle" font-size="${i === cur ? 20 : 14}" font-weight="700" fill="#fff" font-family="Fredoka" style="paint-order:stroke" stroke="${shade(c, .6)}" stroke-width="3">${HE[n]}</text>`;
+      if (i < done) h += `<path d="${STAR}" transform="translate(${x + 8} ${y - 34}) scale(.75)" fill="#ffc93c" stroke="#f0a020"/>`;
+      h += '</g>';
+    });
+    document.getElementById('necklace').innerHTML = h;
+  })();
+
+  // ---------- Sticker: die-cut whale (original illustration) ----------
+  document.getElementById('sticker-whale').innerHTML = `
+    <path d="M30 120 C20 70 70 40 116 46 C160 52 186 86 176 122 C192 108 198 92 194 78 C204 98 200 124 182 136 C170 170 120 182 80 172 C44 164 34 146 30 120Z" fill="#fff"/>
+    <path d="M42 120 C36 78 76 56 116 60 C152 64 172 92 164 122 C176 114 182 104 182 96 C186 112 180 126 168 134 C156 160 118 168 84 160 C56 154 46 140 42 120Z" fill="#38a9e6"/>
+    <path d="M48 128 C70 150 130 156 162 132 C150 154 116 164 84 158 C64 154 52 144 48 128Z" fill="#bfe8ff"/>
+    <circle cx="78" cy="104" r="8" fill="#2a2550"/><circle cx="81" cy="101" r="2.6" fill="#fff"/>
+    <ellipse cx="66" cy="122" rx="9" ry="5" fill="#ff8fab" opacity=".7"/>
+    <path d="M86 126 Q98 136 110 124" stroke="#2a2550" stroke-width="4" stroke-linecap="round" fill="none"/>
+    <path d="M112 50 C110 36 100 28 92 28 M116 48 C120 32 132 26 142 30" stroke="#fff" stroke-width="12" stroke-linecap="round" fill="none"/>
+    <path d="M112 50 C110 36 100 28 92 28 M116 48 C120 32 132 26 142 30" stroke="#7fd0ff" stroke-width="5" stroke-linecap="round" fill="none"/>
+    <path d="M150 20 v18 a5 4 -20 1 1 -3 -3 V14 l14 -4 v18 a5 4 -20 1 1 -3 -3 V16z" fill="#ffd23f" stroke="#fff" stroke-width="3" paint-order="stroke"/>`;
+
+  // ---------- Keyboard: 37 keys C3–C6, stickers on white keys ----------
+  (function () {
+    const kb = document.getElementById('kb');
+    const whites = []; for (let m = 48; m <= 84; m++) if (!isBlack(m)) whites.push(m);
+    const target = 69; // A4 (blue) is the next note in the song view
+    whites.forEach((m) => {
+      const k = document.createElement('div'); k.className = 'wk'; k.dataset.m = m;
+      k.innerHTML = `<span class="stk" style="background:${COLORS[m % 12]}"></span>`;
+      kb.appendChild(k);
+    });
+    for (let m = 48; m <= 84; m++) if (isBlack(m)) {
+      const i = whites.indexOf(m - 1), w = 60 / whites.length;
+      const k = document.createElement('div'); k.className = 'bk';
+      k.style.width = w + '%'; k.style.left = ((i + 1) / whites.length * 100 - w / 2) + '%';
+      kb.appendChild(k);
+    }
+    window.setTarget = (on) => {
+      const k = kb.querySelector(`[data-m="${target}"]`);
+      k.classList.toggle('target', on); k.style.setProperty('--tc', COLORS[target % 12]);
+      k.querySelector('.pin')?.remove();
+      if (on) k.insertAdjacentHTML('beforeend', `<svg class="pin" viewBox="0 0 46 60"><path d="M23 58 C10 40 2 30 2 21 a21 21 0 0 1 42 0 c0 9 -8 19 -21 37z" fill="${COLORS[9]}" stroke="#fff" stroke-width="3"/><circle cx="23" cy="21" r="9" fill="#fff"/></svg>`);
+    };
+  })();
+
+  // ---------- View switching (preview only) ----------
+  function show() {
+    const v = (location.hash || '#home').slice(1);
+    document.querySelectorAll('.view').forEach((s) => s.classList.toggle('on', s.id === 'v-' + v));
+    document.querySelectorAll('.switch a').forEach((a) => a.classList.toggle('on', a.hash === '#' + v));
+    setTarget(v === 'game');
+    if (v === 'home') { renderLED('001'); modeLight('sound'); highlightChart('SOUND:001-015'); }
+    if (v === 'game') { renderLED('003'); modeLight('song'); highlightChart('SONG:001-008'); }
+    if (v === 'reward') { renderLED('003'); modeLight('song'); highlightChart('SONG:001-008'); }
+  }
+  addEventListener('hashchange', show); show();
+</script>
+</body>
+</html>

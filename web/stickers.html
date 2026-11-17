@@ -1,0 +1,47 @@
+<!doctype html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>מדבקות לאורגן</title>
+<style>
+  :root { --d: 13mm; }
+  body { font-family: -apple-system, Arial, sans-serif; margin: 12mm; color: #2b2d5c; background: #fff; }
+  h1 { margin: 0 0 4mm; font-size: 20pt; }
+  p, li { font-size: 11pt; line-height: 1.5; }
+  .legend { display: flex; gap: 6mm; flex-wrap: wrap; margin: 4mm 0 8mm; }
+  .legend span { display: flex; align-items: center; gap: 2mm; font-size: 12pt; }
+  .legend i { width: 6mm; height: 6mm; border-radius: 50%; display: inline-block; }
+  .sheet { display: flex; flex-direction: column; gap: 4mm; direction: ltr; }
+  .row { display: flex; gap: 3mm; flex-wrap: wrap; }
+  .st { width: var(--d); height: var(--d); border-radius: 50%; border: 0.3mm dashed #999; display: flex; align-items: center; justify-content: center; color: #fff; font-weight: bold; font-size: 9pt; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  .tip { background: #f3f6ff; padding: 4mm 6mm; border-radius: 4mm; margin-top: 8mm; }
+  @media print { .noprint { display: none; } body { margin: 8mm; } }
+  button { font-size: 14pt; padding: 3mm 6mm; border-radius: 3mm; border: 0; background: #6ee7b7; }
+</style>
+</head>
+<body>
+  <h1>🎹 מדבקות צבעים לאורגן (37 קלידים)</h1>
+  <p>הדפיסו על נייר מדבקות (או נייר רגיל + סלוטייפ שקוף), גזרו את העיגולים והדביקו בתחתית כל קליד לבן — <b>משמאל לימין</b>, בדיוק לפי השורות. הצבעים זהים לצבעים באפליקציה.</p>
+  <div class="legend" id="legend"></div>
+  <button class="noprint" onclick="print()">🖨️ הדפסה</button>
+  <div class="sheet" id="sheet"></div>
+  <div class="tip">
+    <b>טיפים:</b>
+    <ul>
+      <li>הקליד הכי שמאלי באורגן הוא <b>דו (אדום)</b>. בסך הכול יש 22 קלידים לבנים: 3 סיבובים של 7 צבעים + עוד אדום אחד בסוף.</li>
+      <li>אם האוקטבה שהילדה מנגנת בה היא האמצעית — אפשר להדביק רק את 7 המדבקות של השורה השנייה (מתחילים ב-<b>דו האמצעי</b>, הקליד ה-8 הלבן משמאל).</li>
+      <li>אם הדיו לא מספיק עמיד — אפשר לקנות מדבקות עיגולים צבעוניות (14 מ"מ) בכל חנות כלי כתיבה.</li>
+    </ul>
+  </div>
+<script>
+  const C = [['#ff4d5e','דו','אדום'],['#ff9a2e','רה','כתום'],['#ffd23f','מי','צהוב'],['#3ddc84','פה','ירוק'],['#38c6f4','סול','תכלת'],['#5b6cff','לה','כחול'],['#b65cff','סי','סגול']];
+  document.getElementById('legend').innerHTML = C.map(c => `<span><i style="background:${c[0]}"></i>${c[1]} – ${c[2]}</span>`).join('');
+  const rows = [C, C, C.concat([C[0]])];
+  const sheet = document.getElementById('sheet');
+  // Two full sets so there are spares.
+  for (let set = 0; set < 2; set++) rows.forEach(r => {
+    sheet.insertAdjacentHTML('beforeend', '<div class="row">' + r.map(c => `<div class="st" style="background:${c[0]}">${c[1]}</div>`).join('') + '</div>');
+  });
+</script>
+</body>
+</html>

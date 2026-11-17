@@ -1,0 +1,25 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+  <defs><linearGradient id="bg" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#8fd3ff"/><stop offset="1" stop-color="#ffe7a8"/></linearGradient></defs>
+  <rect width="512" height="512" rx="112" fill="url(#bg)"/>
+  <rect x="56" y="250" width="400" height="190" rx="24" fill="#2e3240"/>
+  <g>
+    <rect x="72" y="266" width="50" height="160" rx="8" fill="#fff"/><circle cx="97" cy="396" r="16" fill="#ff4d5e"/>
+    <rect x="127" y="266" width="50" height="160" rx="8" fill="#fff"/><circle cx="152" cy="396" r="16" fill="#ff9a2e"/>
+    <rect x="182" y="266" width="50" height="160" rx="8" fill="#fff"/><circle cx="207" cy="396" r="16" fill="#ffd23f"/>
+    <rect x="237" y="266" width="50" height="160" rx="8" fill="#fff"/><circle cx="262" cy="396" r="16" fill="#3ddc84"/>
+    <rect x="292" y="266" width="50" height="160" rx="8" fill="#fff"/><circle cx="317" cy="396" r="16" fill="#38c6f4"/>
+    <rect x="347" y="266" width="50" height="160" rx="8" fill="#fff"/><circle cx="372" cy="396" r="16" fill="#5b6cff"/>
+    <rect x="402" y="266" width="38" height="160" rx="8" fill="#fff"/>
+    <rect x="110" y="266" width="30" height="96" rx="5" fill="#111"/><rect x="166" y="266" width="30" height="96" rx="5" fill="#111"/>
+    <rect x="276" y="266" width="30" height="96" rx="5" fill="#111"/><rect x="331" y="266" width="30" height="96" rx="5" fill="#111"/><rect x="386" y="266" width="30" height="96" rx="5" fill="#111"/>
+  </g>
+  <!-- owl -->
+  <ellipse cx="256" cy="170" rx="96" ry="88" fill="#a86b3c"/>
+  <ellipse cx="256" cy="196" rx="60" ry="52" fill="#e9c08d"/>
+  <circle cx="218" cy="150" r="34" fill="#fff"/><circle cx="294" cy="150" r="34" fill="#fff"/>
+  <circle cx="222" cy="154" r="16" fill="#2b2d5c"/><circle cx="290" cy="154" r="16" fill="#2b2d5c"/>
+  <circle cx="227" cy="148" r="5" fill="#fff"/><circle cx="295" cy="148" r="5" fill="#fff"/>
+  <path d="M244 180 L268 180 L256 198 Z" fill="#ff9a2e"/>
+  <path d="M176 104 L196 70 L214 108 Z M336 104 L316 70 L298 108 Z" fill="#a86b3c"/>
+  <text x="420" y="110" font-size="72" fill="#ff4d5e">♪</text>
+</svg>
