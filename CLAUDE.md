@@ -8,9 +8,9 @@ What it is: a web app (PWA) that teaches Roy's 4-year-old daughter to play her r
 - Site: https://roy7534.github.io/mk37-kids/ (GitHub Pages, branch `gh-pages` = contents of `web/`)
 - Repo: github.com/roy7534/mk37-kids (public — required for free Pages; mom's voice clips are public there, user approved 2026-11-23)
 - Deploy (ask the user before pushing anything new that is personal):
-  1. bump `CACHE` in `web/sw.js` (currently `mk37kids-v4`) so iPads pick up the update
+  1. bump `CACHE` in `web/sw.js` (currently `mk37kids-v4`) so installed apps pick up the update
   2. commit on `main`, `git push origin main`
-  3. `git branch -D gh-pages; git subtree split --prefix web -b gh-pages && git push -f origin gh-pages`
+  3. `git subtree split --prefix web --branch gh-pages && git push origin gh-pages` (normal push, no force — force push is blocked)
   4. wait ~1 min, check the live URL loads (curl a changed file)
 - Local run: `.claude/launch.json` → `piano-web` (python http.server on port 5180, absolute path to `web/`).
   Browser pane blocks the mic; test input by calling `window.nativeMidi(0x90, note, 90)` in the console.
