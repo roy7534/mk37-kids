@@ -19,14 +19,15 @@
   V.keys = () => Object.keys(window.PHRASES || {});
 
   // Load the clips for the chosen gender + any parent recordings.
-  V.init = async function (gender) {
-    V.gender = gender || 'f'; V.buffers = {};
-    const keys = V.keys();
-    await Promise.all(keys.map(async (k) => {
-      try {
-        const r = await fetch(`voice/${V.gender}/${k}.mp3`);
-        if (r.ok) V.buffers[k] = await Audio2.decode(await r.arrayBuffer());
-      } catch (e) {}
+  // pack 'mom' = family recording (voice/mom/*.m4a); any missing clip falls back to the neural voice.
+  V.init = async function (gender, pack = 'mom') {
+    V.gender = gender || 'f'; V.pack = pack; V.buffers = {};
+    const load = async (url) => {
+      try { const r = await fetch(url); return r.ok ? await Audio2.decode(await r.arrayBuffer()) : null; } catch (e) { return null; }
+    };
+    await Promise.all(V.keys().map(async (k) => {
+      const buf = (pack === 'mom' && await load(`voice/mom/${k}.m4a`)) || await load(`voice/${V.gender}/${k}.mp3`);
+      if (buf) V.buffers[k] = buf;
     }));
     try {
       const all = await idb('readonly', (s) => s.getAllKeys());

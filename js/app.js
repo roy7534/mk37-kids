@@ -13,7 +13,7 @@
   const KEY = 'mk37kids-v2';
   const DEF = {
     name: '', gender: 'f', levelStars: {}, songStars: {}, stickers: [], custom: [], lastGift: '',
-    settings: { input: 'auto', micSens: 0.5, volume: 0.8, strict: false, voice: true, timeLimit: 0, lowKey: 48, touchPlay: false }
+    settings: { input: 'auto', micSens: 0.5, volume: 0.8, strict: false, voice: true, voicePack: 'mom', timeLimit: 0, lowKey: 48, touchPlay: false }
   };
   let S;
   try { S = Object.assign({}, DEF, JSON.parse(localStorage.getItem(KEY) || '{}')); S.settings = Object.assign({}, DEF.settings, S.settings); }
@@ -671,7 +671,7 @@
     const st = S.settings;
     $('#p-name').value = S.name; $('#p-gender').value = S.gender; $('#p-time').value = st.timeLimit;
     $('#p-input').value = st.input; $('#p-sens').value = st.micSens; $('#p-strict').checked = st.strict; $('#p-touch').checked = st.touchPlay;
-    $('#p-voice').checked = st.voice; $('#p-vol').value = st.volume;
+    $('#p-voice').checked = st.voice; $('#p-pack').value = st.voicePack; $('#p-vol').value = st.volume;
     $('#p-lowkey').textContent = M.nameEn(st.lowKey) + ' (MIDI ' + st.lowKey + ')';
   }
   function renderRecList() {
@@ -690,7 +690,8 @@
   });
   $('#p-close').addEventListener('click', () => { $('#parent').classList.add('hidden'); clearInterval(meterTimer); calibrating = false; if (current === 'home') renderHome(); });
   $('#p-name').addEventListener('input', (e) => { S.name = e.target.value.trim(); save(); });
-  $('#p-gender').addEventListener('change', async (e) => { S.gender = e.target.value; save(); await V.init(S.gender); renderRecList(); });
+  $('#p-gender').addEventListener('change', async (e) => { S.gender = e.target.value; save(); await V.init(S.gender, S.settings.voicePack); renderRecList(); });
+  $('#p-pack').addEventListener('change', async (e) => { S.settings.voicePack = e.target.value; save(); await V.init(S.gender, S.settings.voicePack); V.say('hello'); });
   $('#p-time').addEventListener('change', (e) => { S.settings.timeLimit = Math.max(0, +e.target.value || 0); save(); });
   $('#p-input').addEventListener('change', (e) => { S.settings.input = e.target.value; save(); startInputs(); });
   $('#p-sens').addEventListener('input', (e) => { S.settings.micSens = +e.target.value; Input.micSensitivity = +e.target.value; save(); });
@@ -749,7 +750,7 @@
     if (started) return; started = true;
     AU.init(); AU.setVolume(S.settings.volume); V.on = S.settings.voice;
     go('home');
-    await V.init(S.gender);
+    await V.init(S.gender, S.settings.voicePack);
     V.say('hello');
     startInputs();
   }
