@@ -14,6 +14,7 @@ What it is: a web app (PWA) that teaches Roy's 4-year-old daughter to play her r
   4. wait ~1 min, check the live URL loads (curl a changed file)
 - Local run: `.claude/launch.json` → `piano-web` (python http.server on port 5180, absolute path to `web/`).
   Browser pane blocks the mic; test input by calling `window.nativeMidi(0x90, note, 90)` in the console.
+  Before testing set `settings.input='midi'` in localStorage `mk37kids-v2` so the app never opens the Mac's mic (user request), and close the tab after.
 
 ## Structure
 - `web/index.html`, `web/css/style.css` — UI (Fredoka font, claymorphism cards inside the organ body)
