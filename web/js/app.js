@@ -429,19 +429,29 @@
     draw(cur = this.idx) {
       const svg = $('#necklace'); if (!svg) return;
       const seq = this.song.seq, W = svg.clientWidth || 800, H = svg.clientHeight || 160;
-      const gap = 66, y0 = H / 2;
-      const pts = seq.map((_, i) => [i * gap, y0 + Math.sin(i * 0.7) * Math.min(22, H / 7)]);
+      // Leave room above the beads for the "play this one" arrow.
+      // Arrow needs ~120px above the bead centre (radius + gap + arrow + bounce).
+      const gap = 70, y0 = Math.max(H / 2 + 20, Math.min(124, H - 46));
+      const pts = seq.map((_, i) => [i * gap, y0 + Math.sin(i * 0.7) * Math.min(16, H / 9)]);
       const shift = W / 2 - cur * gap;
       let h = `<defs><radialGradient id="gloss" cx="35%" cy="30%"><stop offset="0" stop-color="#fff" stop-opacity=".8"/><stop offset=".45" stop-color="#fff" stop-opacity="0"/></radialGradient></defs><g style="transform:translateX(${shift}px);transition:transform .45s cubic-bezier(.34,1.56,.64,1)">`;
       h += `<path d="${pts.map((p, i) => (i ? 'L' : 'M') + p.join(' ')).join(' ')}" stroke="#d9b7c6" stroke-width="4" fill="none" stroke-dasharray="1 9" stroke-linecap="round"/>`;
       seq.forEach((n, i) => {
-        const [x, y] = pts[i], isCur = i === cur, r = isCur ? 34 : n.d >= 2 ? 28 : 24, c = M.colorOf(n.n), done = i < this.idx;
+        const [x, y] = pts[i], isCur = i === cur, r = isCur ? 38 : n.d >= 2 ? 26 : 22, c = M.colorOf(n.n), done = i < this.idx && !isCur;
         if (isCur && this.phase === 'play') h += `<circle cx="${x}" cy="${y}" r="${r + 10}" fill="none" stroke="${c}" stroke-width="4"><animate attributeName="r" values="${r + 6};${r + 16};${r + 6}" dur="1.2s" repeatCount="indefinite"/><animate attributeName="opacity" values=".6;0;.6" dur="1.2s" repeatCount="indefinite"/></circle>`;
-        h += `<g opacity="${done ? 0.45 : 1}"><circle cx="${x}" cy="${y + 4}" r="${r}" fill="${Art.shade(c, 0.7)}"/><circle cx="${x}" cy="${y}" r="${r}" fill="${c}"/><circle cx="${x}" cy="${y}" r="${r}" fill="url(#gloss)"/>`;
-        h += `<text x="${x}" y="${y + (isCur ? 7 : 5)}" text-anchor="middle" font-size="${isCur ? 19 : 14}" font-weight="700" fill="#fff" font-family="Fredoka" style="paint-order:stroke" stroke="${Art.shade(c, 0.6)}" stroke-width="3">${M.nameHe(n.n)}</text>`;
+        if (isCur) h += `<circle cx="${x}" cy="${y}" r="${r + 5}" fill="#fff" opacity=".95"/>`;
+        h += `<g opacity="${done ? 0.3 : isCur ? 1 : 0.85}"><circle cx="${x}" cy="${y + 4}" r="${r}" fill="${Art.shade(c, 0.7)}"/><circle cx="${x}" cy="${y}" r="${r}" fill="${c}"/><circle cx="${x}" cy="${y}" r="${r}" fill="url(#gloss)"/>`;
+        h += `<text x="${x}" y="${y + (isCur ? 8 : 5)}" text-anchor="middle" font-size="${isCur ? 22 : 13}" font-weight="700" fill="#fff" font-family="Fredoka" style="paint-order:stroke" stroke="${Art.shade(c, 0.6)}" stroke-width="3">${M.nameHe(n.n)}</text>`;
         if (done) h += `<path d="${Art.STAR}" transform="translate(${x + 6} ${y - r - 14}) scale(.7)" fill="#ffc93c" stroke="#f0a020"/>`;
         h += '</g>';
       });
+      // Big bouncing arrow above the bead to play now (drawn last so it sits on top).
+      if (seq[cur]) {
+        const [x, y] = pts[cur], c = M.colorOf(seq[cur].n);
+        h += `<g transform="translate(${x} ${y - 38 - 8}) scale(1.25)"><g><animateTransform attributeName="transform" type="translate" values="0 -9;0 0;0 -9" dur=".8s" repeatCount="indefinite" calcMode="spline" keySplines=".45 0 .55 1;.45 0 .55 1"/>
+          <path d="M-14 -46 H14 V-22 H26 L0 0 L-26 -22 H-14 Z" fill="${c}" stroke="#fff" stroke-width="4" stroke-linejoin="round" style="filter:drop-shadow(0 3px 3px rgba(42,37,80,.3))"/>
+          <path d="M-7 -40 V-26" stroke="#fff" stroke-width="4" stroke-linecap="round" opacity=".7"/></g></g>`;
+      }
       svg.innerHTML = h + '</g>';
       Game.score(this.idx, seq.length);
     },
