@@ -8,7 +8,7 @@ What it is: a web app (PWA) that teaches Roy's 4-year-old daughter to play her r
 - Site: https://roy7534.github.io/mk37-kids/ (GitHub Pages, branch `gh-pages` = contents of `web/`)
 - Repo: github.com/roy7534/mk37-kids (public — required for free Pages; mom's voice clips are public there, user approved 2026-11-23)
 - Deploy (ask the user before pushing anything new that is personal):
-  1. bump `CACHE` in `web/sw.js` (currently `mk37kids-v5`) so installed apps pick up the update
+  1. bump `CACHE` in `web/sw.js` (currently `mk37kids-v6`) so installed apps pick up the update
   2. commit on `main`, `git push origin main`
   3. `git subtree split --prefix web --branch gh-pages && git push origin gh-pages` (normal push, no force — force push is blocked)
   4. wait ~1 min, check the live URL loads (curl a changed file)
@@ -47,6 +47,7 @@ What it is: a web app (PWA) that teaches Roy's 4-year-old daughter to play her r
 - Panel buttons work like the real MK37: SONG → song list (digits select, orange ▶ starts), SOUND/STYLE → free organ.
 - Note matching is by pitch class (octave-free) unless "strict octave" + MIDI.
 - 20 journey levels (find colour → echo → songs), 3-star scoring, gift on first win + ~35% surprise gifts, daily gift.
+- Volume knob on the panel is real (master volume, saved). Panel SVG has `touch-action: none`; knob drag tracks one pointerId and ends on pointerup OR pointercancel (bug fixed 2026-11-23: a cancelled drag made the next key touch drop volume to 0 and save it). On start, a saved volume < 0.15 resets to 0.8.
 - Song necklace: the bead to play now is big with a white ring and a bouncing arrow above it in the note colour (user request 2026-11-23); played beads fade.
 - No emojis anywhere — all art is original SVG. User wants Hebrew UI and Hebrew replies.
 
