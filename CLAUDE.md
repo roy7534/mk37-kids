@@ -26,6 +26,6 @@ The whole iPad screen looks like the MK37 panel; the game runs in a "magic windo
 - No emojis — all art is original SVG.
 
 ## Status / next
-- Done: full app, Hila voice, mom voice integrated locally, tested in desktop browser only.
+- Done: full app, Hila voice, mom voice live on the site (2026-11-23), tested in desktop browser only.
 - Not yet verified: on a real iPad, mic recognition with the real organ, USB-C cable.
-- Next: push mom's voice (needs user OK — public site), install on iPad (Safari → Add to Home Screen), run the hearing test in the parent area.
+- Next: install on iPad (Safari → Add to Home Screen), run the hearing test in the parent area.
