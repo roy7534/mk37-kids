@@ -8,7 +8,7 @@ What it is: a web app (PWA) that teaches Roy's 4-year-old daughter to play her r
 - Site: https://roy7534.github.io/mk37-kids/ (GitHub Pages, branch `gh-pages` = contents of `web/`)
 - Repo: github.com/roy7534/mk37-kids (public — required for free Pages; mom's voice clips are public there, user approved 2026-11-23)
 - Deploy (ask the user before pushing anything new that is personal):
-  1. bump `CACHE` in `web/sw.js` (currently `mk37kids-v3`) so iPads pick up the update
+  1. bump `CACHE` in `web/sw.js` (currently `mk37kids-v4`) so iPads pick up the update
   2. commit on `main`, `git push origin main`
   3. `git branch -D gh-pages; git subtree split --prefix web -b gh-pages && git push -f origin gh-pages`
   4. wait ~1 min, check the live URL loads (curl a changed file)
@@ -49,10 +49,16 @@ What it is: a web app (PWA) that teaches Roy's 4-year-old daughter to play her r
 - 20 journey levels (find colour → echo → songs), 3-star scoring, gift on first win + ~35% surprise gifts, daily gift.
 - No emojis anywhere — all art is original SVG. User wants Hebrew UI and Hebrew replies.
 
+## Target device
+- The child's device is an **Android tablet** (not an iPad, found out 2026-11-23). Chrome on Android supports Web MIDI,
+  so a USB-C cable to the organ gives exact notes with no native app. Install = Chrome ⋮ → "Install app" (WebAPK).
+- Compact layout for short landscape screens (≤640px high, e.g. 1024x600) at the end of `style.css`.
+- iPad path (Safari + mic, or `ios/` shell for MIDI) is still supported but secondary.
+
 ## Status / next
 - Done: full app on the MK37 design, Hila voice, mom's voice (default) live on the site — 2026-11-23.
 - Tested only in the desktop browser (simulated MIDI). NOT yet verified: real iPad, mic recognition with the real organ,
   USB-C cable, Safari home-screen install.
-- Next: user installs on the iPad (Safari → Add to Home Screen), runs the live hearing test in the parent area and reports
+- Next: user installs on the Android tablet (Chrome → Install app; cable or mic), runs the live hearing test in the parent area and reports
   what "תו אחרון שנשמע" shows → tune mic detection (`input.js`: gate, clarity 0.8, 2 stable frames) if needed.
 - Ideas not started: voice cloning via ElevenLabs (needs user's account), native app build with Xcode for MIDI over cable.
