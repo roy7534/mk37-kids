@@ -264,3 +264,33 @@ button.chip:active { transform: translateY(3px); box-shadow: 0 1px 0 var(--pinkl
   .stage { right: 16px; bottom: 170px; }
   .free { flex-direction: column; }
 }
+
+/* Small Android tablets (e.g. 1024x600): give the magic window more height */
+@media (max-height: 640px) and (orientation: landscape) {
+  :root { --kb-h: clamp(140px, 27vh, 180px); }
+  .panel { max-height: 22vh; }
+  .organ { padding-top: calc(env(safe-area-inset-top) + 4px); }
+  .window { margin: 2px 2px 6px; border-radius: 18px; }
+  .home { padding: 8px 16px 44px; gap: 12px; }
+  .card { width: min(130px, 13vw); font-size: 17px; border-radius: 20px; gap: 2px; }
+  .card small { display: none; }
+  .mascot, .guide .mascot { width: 76px; }
+  .mascot.big { width: 110px; }
+  .bubble { font-size: 15px; padding: 6px 12px; max-width: 220px; }
+  .jar { width: 44px; } .jar-count { font-size: 20px; }
+  #daily-gift { width: 44px; height: 44px; }
+  .chip { font-size: 14px; min-height: 32px; padding: 4px 12px; }
+  .status { bottom: 6px; }
+  .win-head { top: 6px; }
+  .song-list, .album, .editor { top: 44px; }
+  .song { flex-basis: 130px; font-size: 15px; }
+  .stage { inset: 40px 160px 36px 12px; }
+  .orb { width: 100px; height: 100px; font-size: 24px; }
+  .splash h1 { font-size: 34px; } .orange-btn { width: 90px; height: 90px; }
+  .free-card { min-width: 300px; padding: 10px 20px; } .free-name { font-size: 30px; }
+  .reward-card { padding: 10px 24px 14px; } .reward-card h2 { font-size: 26px; }
+  .stars svg { width: 46px; height: 46px; } .stars svg:nth-child(2) { width: 58px; height: 58px; }
+  .gift-btn.big { width: 100px; height: 100px; } .sticker-new svg { width: 120px; height: 120px; }
+  .pin { width: 32px; top: -48px; }
+}
+.stage { overflow: hidden; border-radius: 16px; }
