@@ -80,7 +80,11 @@
   let holdT, knobDrag = null;
   function onPanel(b, phase, e) {
     if (b === 'knob') {
-      if (phase === 'down') { knobDrag = { y: e.clientY, v: AU.volume }; }
+      if (phase === 'down') {
+        // Track only this finger, and keep receiving its moves even outside the knob
+        knobDrag = { id: e.pointerId, y: e.clientY, v: AU.volume };
+        try { e.target.setPointerCapture(e.pointerId); } catch (err) {}
+      }
       return;
     }
     if (b === 'power') {
@@ -114,11 +118,14 @@
     panelSync();
   }
   window.addEventListener('pointermove', (e) => {
-    if (!knobDrag) return;
+    if (!knobDrag || e.pointerId !== knobDrag.id) return;
     const v = Math.max(0, Math.min(1, knobDrag.v + (knobDrag.y - e.clientY) / 120));
     AU.setVolume(v); S.settings.volume = v; panel.knob(v);
   });
-  window.addEventListener('pointerup', () => { if (knobDrag) { knobDrag = null; save(); } });
+  // End the drag on lift OR when the browser cancels the gesture (e.g. it took the touch for scrolling)
+  ['pointerup', 'pointercancel'].forEach((ev) => window.addEventListener(ev, (e) => {
+    if (knobDrag && e.pointerId === knobDrag.id) { knobDrag = null; save(); }
+  }));
 
   let entryT;
   function digit(d) {
@@ -758,6 +765,8 @@
   let started = false;
   async function start() {
     if (started) return; started = true;
+    // Never start silent: a near-zero saved volume (old knob bug) falls back to the default
+    if (!(S.settings.volume >= 0.15)) { S.settings.volume = DEF.settings.volume; save(); }
     AU.init(); AU.setVolume(S.settings.volume); V.on = S.settings.voice;
     go('home');
     await V.init(S.gender, S.settings.voicePack);
